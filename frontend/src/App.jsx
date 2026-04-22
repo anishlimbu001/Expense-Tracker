@@ -10,7 +10,7 @@ import Profile from "./pages/Profile.jsx";
 import axios from "axios";
 import Prediction from "./pages/Prediction.jsx";
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Helper to get transactions from localStorage
 const getTransactionsFromStorage = () => {
