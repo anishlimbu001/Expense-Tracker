@@ -6,9 +6,10 @@
   "author": "",
   "type": "module",
   "main": "server.js",
-  "scripts": {
-    "start": "nodemon server.js"
-  },
+ "scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+},
   "dependencies": {
     "axios": "^1.15.1",
     "bcryptjs": "^3.0.3",

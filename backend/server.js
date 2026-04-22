@@ -11,10 +11,13 @@ import router from './routes/predictionRoute.js';
 import mlRoute from './routes/ml.routes.js';
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 // ✅ MIDDLEWARES
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,5 +38,5 @@ app.get('/', (req, res) => {
 
 // ✅ SERVER
 app.listen(port, () => {
-    console.log(`Server Started on http://localhost:${port}`);
+    console.log(`Server running on port ${port}`);
 });
