@@ -9,7 +9,7 @@ import expenseRouter from './routes/expenseRoute.js';
 import dashboardRouter from './routes/dashboardRoute.js';
 import router from './routes/predictionRoute.js';
 import mlRoute from './routes/ml.routes.js';
-
+console.log("STARTING SERVER");
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -22,8 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ DATABASE
-connectDB();
-
+connectDB();app.listen(port, () => {
+  console.log("Server running");
+});
 // ✅ ROUTES
 app.use("/api/user", userRouter);
 app.use("/api/income", incomeRouter);
