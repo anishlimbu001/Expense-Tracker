@@ -9,8 +9,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const API_BASE = "http://localhost:4000/api";
-
 const Prediction = () => {
   const [prediction, setPrediction] = useState(0);
   const [history, setHistory] = useState([]);
@@ -31,28 +29,26 @@ const Prediction = () => {
         localStorage.getItem("token") ||
         sessionStorage.getItem("token");
 
-      const headers = token
-        ? { Authorization: `Bearer ${token}` }
-        : {};
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const res = await axios.get(
-        `${API_BASE}/expense/get`,
+        "http://localhost:4000/api/expense/get",
         { headers }
       );
 
-      const expenses = (res.data || [])
+      const expenses = res.data
         .map((item) => Number(item.amount))
-        .filter((v) => !isNaN(v));
+        .filter((val) => !isNaN(val));
 
       const mlRes = await axios.post(
-        `${API_BASE}/ml/predict`,
+        "http://localhost:4000/api/ml/predict",
         { expenses }
       );
 
-      setPrediction(Math.round(mlRes.data?.prediction || 0));
+      setPrediction(Math.round(mlRes.data.prediction));
 
       setHistory(
-        (mlRes.data?.history || []).map((val, i) => ({
+        mlRes.data.history.map((val, i) => ({
           index: i + 1,
           amount: val,
         }))
@@ -64,21 +60,22 @@ const Prediction = () => {
     }
   };
 
+  // ✅ Currency formatter
   const formatRupee = (value) => `रु ${value}`;
 
   return (
     <div className="p-6 space-y-6">
 
+      {/* Header */}
       <div className="bg-white p-5 rounded-xl shadow">
-        <h1 className="text-2xl font-bold">
-          AI Expense Prediction
-        </h1>
+        <h1 className="text-2xl font-bold">AI Expense Prediction</h1>
         <p className="text-gray-500">
           Based on your past spending pattern
         </p>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl shadow">
+      {/* Prediction Card */}
+      <div className="bg-linear-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl shadow">
         <h2 className="text-lg">Next Month Prediction</h2>
 
         {loading ? (
@@ -90,16 +87,21 @@ const Prediction = () => {
         )}
       </div>
 
+      {/* Chart */}
       <div className="bg-white p-4 rounded-xl shadow h-96">
-        <h3 className="font-semibold mb-3">
-          Spending Trend
-        </h3>
+        <h3 className="font-semibold mb-3">Spending Trend</h3>
 
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={history}>
+
             <XAxis dataKey="index" />
+
+            {/* ✅ Y-axis with NPR */}
             <YAxis tickFormatter={formatRupee} />
+
+            {/* ✅ Tooltip with NPR */}
             <Tooltip formatter={(value) => formatRupee(value)} />
+
             <Line
               type="monotone"
               dataKey="amount"
