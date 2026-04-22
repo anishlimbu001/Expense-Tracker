@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {toast, ToastContainer} from 'react-toastify';
 import axios from 'axios';
 
-const BASE_URL= "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 Modal.setAppElement('#root');
 const PasswordInput = memo(({ name, label, value, error, showField, onToggle, onChange, disabled }) => (
